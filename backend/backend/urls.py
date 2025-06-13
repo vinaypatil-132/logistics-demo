@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
+from django.http import HttpResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('trips/', include('api.urls')),
-    path('', lambda request: redirect('trips/')),  # Redirect root to /trips/
+    path('favicon.ico', lambda request: HttpResponse('', content_type='image/x-icon')),  # 🛠️ Prevent favicon error
+    path('', lambda request: redirect('trips/')),  # 🔁 Redirect root to /trips/
 ]

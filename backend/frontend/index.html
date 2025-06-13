@@ -1,41 +1,54 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Logistics Demo</title>
+  <title>Logistics Demo</title>
 </head>
+
 <body>
-    <h1>Welcome to the Logistics Demo Website!</h1>
-    <button onclick="loadTrips()">Load Trips</button>
-    <div id="trip-data"></div>
+  <h1>Welcome to the Logistics Demo Website!</h1>
+  <button onclick="loadTrips()">Load Trips</button>
+  <div id="trip-data"></div>
 
-    <script>
-        function loadTrips() {
-            fetch('/trips/')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const container = document.getElementById('trip-data');
-                    container.innerHTML = ''; // Clear previous content
+  <script>
+    function loadTrips() {
+      fetch('https://logistics-demo.onrender.com/trips/')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
 
-                    if (data.trips && data.trips.length > 0) {
-                        data.trips.forEach(trip => {
-                            const p = document.createElement('p');
-                            p.textContent = `Trip ID: ${trip.id}, Destination: ${trip.destination}, Driver: ${trip.driver}`;
-                            container.appendChild(p);
-                        });
-                    } else {
-                        container.innerHTML = 'No trips available.';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching trips:', error);
-                    document.getElementById('trip-data').textContent = 'Error fetching trips!';
-                });
-        }
-    </script>
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new TypeError('Expected JSON, but got: ' + contentType);
+          }
+
+          return response.json();
+        })
+        .then(data => {
+          const container = document.getElementById('trip-data');
+          container.innerHTML = '';
+
+          if (data.trips && data.trips.length > 0) {
+            data.trips.forEach(trip => {
+              const p = document.createElement('p');
+              p.textContent = `Trip ID: ${trip.id}, Destination: ${trip.destination}, Driver: ${trip.driver}`;
+              container.appendChild(p);
+            });
+          } else {
+            container.innerHTML = 'No trips found.';
+          }
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+          document.getElementById('trip-data').innerText = 'Error fetching trips!';
+        });
+    }
+
+    // Optional: Auto-load trips on page load
+    window.onload = loadTrips;
+  </script>
+
 </body>
+
 </html>
