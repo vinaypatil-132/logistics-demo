@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Trip Demo</title>
+    <title>Logistics Demo</title>
 </head>
 <body>
-  <h1>Request Trip</h1>
-  <button onclick="alert('Trip Requested (mock)!')">Request Trip</button>
+    <h1>Welcome to the Logistics Demo Website!</h1>
+    <button onclick="loadTrips()">Load Trips</button>
+    <div id="trip-data"></div>
 
-  <h2>Admin View</h2>
-  <button onclick="loadTrips()">Load Trips</button>
-  <ul id="trip-list"></ul>
+    <script>
+        function loadTrips() {
+            fetch('/trips/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const container = document.getElementById('trip-data');
+                    container.innerHTML = ''; // Clear previous content
 
-  <script>
-    function loadTrips() {
-      fetch('http://127.0.0.1:8000/trips/')
-        .then(response => response.json())
-        .then(data => {
-          const list = document.getElementById('trip-list');
-          list.innerHTML = ''; // Clear existing
-
-          data.trips.forEach(trip => {
-            const item = document.createElement('li');
-            item.textContent = `Destination: ${trip.destination}, Driver: ${trip.driver}`;
-            list.appendChild(item);
-          });
-        })
-        .catch(error => {
-          console.error('Error loading trips:', error);
-        });
-    }
-  </script>
+                    if (data.trips && data.trips.length > 0) {
+                        data.trips.forEach(trip => {
+                            const p = document.createElement('p');
+                            p.textContent = `Trip ID: ${trip.id}, Destination: ${trip.destination}, Driver: ${trip.driver}`;
+                            container.appendChild(p);
+                        });
+                    } else {
+                        container.innerHTML = 'No trips available.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching trips:', error);
+                    document.getElementById('trip-data').textContent = 'Error fetching trips!';
+                });
+        }
+    </script>
 </body>
 </html>
