@@ -1,8 +1,7 @@
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
 
-# Create your views here.
-from django.http import JsonResponse
-
+# Existing trip_list view
 def trip_list(request):
     data = {
         "trips": [
@@ -12,3 +11,6 @@ def trip_list(request):
     }
     return JsonResponse(data)
 
+# New home view for "/"
+def home(request):
+    return HttpResponse("Welcome to the Logistics Demo Website!")
