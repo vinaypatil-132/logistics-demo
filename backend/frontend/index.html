@@ -1,14 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
   <title>Logistics Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #3498db;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #trip-data p {
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+    }
+  </style>
 </head>
 
 <body>
   <h1>Welcome to the Logistics Demo Website!</h1>
   <button onclick="loadTrips()">Load Trips</button>
-  <div id="trip-data"></div>
+  <div id="trip-data">Loading trips...</div>
 
   <script>
     function loadTrips() {
@@ -45,10 +76,8 @@
         });
     }
 
-    // Optional: Auto-load trips on page load
     window.onload = loadTrips;
   </script>
-
 </body>
 
 </html>
